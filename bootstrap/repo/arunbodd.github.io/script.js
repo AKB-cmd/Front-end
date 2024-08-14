@@ -1,30 +1,100 @@
-// Dark mode toggle
-document.getElementById('darkModeToggle').addEventListener('click', function() {
-    document.body.classList.toggle('dark-mode');
+// Scroll Event Listener
+window.addEventListener('scroll', () => {
+    const navbar = document.querySelector('.navbar');
+    const navbarBrand = document.querySelector('.navbar-brand');
+    const navbarLinks = document.querySelectorAll('.navbar-nav .nav-link');
+    const backToTopButton = document.getElementById('back-to-top');
+
+    // Navbar and Back-to-Top Button Visibility
+    if (window.scrollY > 500) {
+        navbar.classList.add('scrolled', 'minimized');
+        navbarBrand.classList.add('scrolled');
+        navbarLinks.forEach(link => link.classList.add('scrolled-text'));
+        if (backToTopButton) {
+            backToTopButton.style.opacity = 1;
+            backToTopButton.style.visibility = 'visible';
+        }
+    } else {
+        navbar.classList.remove('scrolled', 'minimized');
+        navbarBrand.classList.remove('scrolled');
+        navbarLinks.forEach(link => link.classList.remove('scrolled-text'));
+        if (backToTopButton) {
+            backToTopButton.style.opacity = 0;
+            backToTopButton.style.visibility = 'hidden';
+        }
+    }
+
+    // Highlight Current Section
+    const sections = document.querySelectorAll('section');
+    let current = '';
+    sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.clientHeight;
+        if (window.scrollY >= sectionTop - 50 && window.scrollY < sectionTop + sectionHeight - 50) {
+            current = section.getAttribute('id');
+        }
+    });
+
+    navbarLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href').includes(current)) {
+            link.classList.add('active');
+        }
+    });
+
+    // Reveal Elements on Scroll
+    const revealElements = document.querySelectorAll('.reveal');
+    revealElements.forEach(element => {
+        const elementTop = element.getBoundingClientRect().top;
+        const viewportHeight = window.innerHeight;
+        if (elementTop < viewportHeight - 100) {
+            element.classList.add('visible');
+        } else {
+            element.classList.remove('visible');
+        }
+    });
 });
 
-// Tab functionality
-function openTab(evt, tabName) {
-    var i, tabcontent, tablinks;
-
-    // Hide all tab contents
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].style.display = "none";
+// DOMContentLoaded Event Listener
+document.addEventListener('DOMContentLoaded', () => {
+    const backToTopButton = document.getElementById('back-to-top');
+    if (backToTopButton) {
+        backToTopButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
     }
 
-    // Remove the active class from all tab links
-    tablinks = document.getElementsByClassName("tablinks");
-    for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    // Smooth Scroll for Anchor Links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    });
+
+    // Scroll to Footer for Contact Link
+    const contactLink = document.querySelector('.navbar-nav .nav-link[href="#footer"]');
+    if (contactLink) {
+        contactLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            document.querySelector('footer').scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
     }
 
-    // Show the current tab and add an "active" class to the button that opened the tab
-    document.getElementById(tabName).style.display = "block";
-    evt.currentTarget.className += " active";
-}
-
-// Set the default tab to open
-document.addEventListener("DOMContentLoaded", function() {
-    document.querySelector(".tablinks").click();
+    // Open Google Search Link for Strength Items
+    const strengthItems = document.querySelectorAll('.strength-item');
+    strengthItems.forEach(item => {
+        item.addEventListener('click', function () {
+            const link = this.getAttribute('data-link');
+            window.open(link, '_blank');
+        });
+    });
 });
