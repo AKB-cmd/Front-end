@@ -1,3 +1,86 @@
+document.addEventListener('DOMContentLoaded', () => {
+    // Back to Top Button
+    const backToTopButton = document.getElementById('back-to-top');
+    if (backToTopButton) {
+        backToTopButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    }
+
+    // Smooth Scroll for Anchor Links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    });
+
+    // Scroll to Footer for Contact Link
+    const contactLink = document.querySelector('.navbar-nav .nav-link[href="#footer"]');
+    if (contactLink) {
+        contactLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            document.querySelector('footer').scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    }
+
+    // Open Google Search Link for Strength Items
+    const strengthItems = document.querySelectorAll('.strength-item');
+    strengthItems.forEach(item => {
+        item.addEventListener('click', function () {
+            const link = this.getAttribute('data-link');
+            window.open(link, '_blank');
+        });
+    });
+
+    // Easter Egg Modal
+    const easterEggLink = document.getElementById('easter-egg');
+    const modal = document.getElementById('easter-egg-modal');
+    const closeModal = document.querySelector('#easter-egg-content .close');
+    
+    if (easterEggLink && modal && closeModal) {
+        easterEggLink.addEventListener('click', (event) => {
+            event.preventDefault(); // Prevent default anchor behavior
+            modal.classList.add('in'); // Show the modal with fade-in effect
+            modal.style.display = 'block'; // Ensure the modal is displayed
+        });
+
+        closeModal.addEventListener('click', () => {
+            modal.classList.remove('in'); // Hide the modal with fade-out effect
+            setTimeout(() => {
+                modal.style.display = 'none'; // Hide the modal after the animation
+            }, 300); // Match this time with the animation duration
+        });
+
+        window.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                modal.classList.remove('in'); // Hide the modal with fade-out effect
+                setTimeout(() => {
+                    modal.style.display = 'none'; // Hide the modal after the animation
+                }, 300); // Match this time with the animation duration
+            }
+        });
+    }
+
+    // Hamburger Menu Toggle
+    const menuToggle = document.getElementById('menu-toggle');
+    const navLinks = document.getElementById('nav-links');
+    
+    if (menuToggle) {
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+    }
+});
+
 // Scroll Event Listener
 window.addEventListener('scroll', () => {
     const navbar = document.querySelector('.navbar');
@@ -52,49 +135,5 @@ window.addEventListener('scroll', () => {
         } else {
             element.classList.remove('visible');
         }
-    });
-});
-
-// DOMContentLoaded Event Listener
-document.addEventListener('DOMContentLoaded', () => {
-    const backToTopButton = document.getElementById('back-to-top');
-    if (backToTopButton) {
-        backToTopButton.addEventListener('click', (e) => {
-            e.preventDefault();
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
-    }
-
-    // Smooth Scroll for Anchor Links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            document.querySelector(this.getAttribute('href')).scrollIntoView({
-                behavior: 'smooth'
-            });
-        });
-    });
-
-    // Scroll to Footer for Contact Link
-    const contactLink = document.querySelector('.navbar-nav .nav-link[href="#footer"]');
-    if (contactLink) {
-        contactLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            document.querySelector('footer').scrollIntoView({
-                behavior: 'smooth'
-            });
-        });
-    }
-
-    // Open Google Search Link for Strength Items
-    const strengthItems = document.querySelectorAll('.strength-item');
-    strengthItems.forEach(item => {
-        item.addEventListener('click', function () {
-            const link = this.getAttribute('data-link');
-            window.open(link, '_blank');
-        });
     });
 });
